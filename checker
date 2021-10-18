@@ -11,6 +11,7 @@ def log():
     options.add_argument(
         'user-agend=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36')
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.headless = True
     browser = webdriver.Chrome(
         executable_path="chromedriver.exe",
         options=options)
@@ -20,8 +21,8 @@ def log():
     proc(browser)
 
 def proc(browser):
-    for mail in permutations('.qazxswedcvfrtgbnhyujmkiolp', count["k"]):
-        if mail[5] != '.':
+    for mail in permutations('qazxswedcvfrtgbnhyujmkiolp.', count["k"]):
+        if mail[5] != '.' and mail[0] != '.':
             i = "".join(mail)
             r = random.randint(0,1)
             if r == 0:
