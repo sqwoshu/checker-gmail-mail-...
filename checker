@@ -1,0 +1,45 @@
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+from itertools import permutations
+import time
+import re
+import random
+
+count = {"k":6}
+def log():
+    options = webdriver.ChromeOptions()
+    options.add_argument(
+        'user-agend=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36')
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    browser = webdriver.Chrome(
+        executable_path="chromedriver.exe",
+        options=options)
+    browser.get('https://mail7.net/')
+    browser.implicitly_wait(10)
+
+    proc(browser)
+
+def proc(browser):
+    for mail in permutations('.qazxswedcvfrtgbnhyujmkiolp', count["k"]):
+        if mail[5] != '.':
+            i = "".join(mail)
+            r = random.randint(0,1)
+            if r == 0:
+                browser.find_element(By.ID, 'emailCheck').clear()
+                browser.find_element(By.ID, 'emailCheck').send_keys(f'{i}@gmail.com')
+                browser.find_element(By.ID, 'submit').click()
+                time.sleep(0.5)
+                txt = browser.find_element(By.XPATH, '/html/body/div/div[2]/div/div/div[3]').text
+                if re.search(r'\bis valid\b', txt):
+                    print(i + '@gmail.com')
+            else:
+                browser.find_element(By.ID, 'emailCheck').clear()
+                browser.find_element(By.ID, 'emailCheck').send_keys(f'{i + str(random.randint(0,100))}@gmail.com')
+                browser.find_element(By.ID, 'submit').click()
+                time.sleep(0.5)
+                txt = browser.find_element(By.XPATH, '/html/body/div/div[2]/div/div/div[3]').text
+                if re.search(r'\bis valid\b', txt):
+                    print(i + '@gmail.com')
+
+
+log()
